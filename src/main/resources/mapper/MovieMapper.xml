@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.movie.dao.MovieDao">
+    <resultMap id="movieList" type="com.aaa.movie.entity.Movie">
+        <id column="movieid" property="movieid"></id>
+        <result column="Moviename" property="Moviename"></result>
+        <result column="Movielang" property="Movielang"></result>
+        <result column="Moviescore" property="Moviescore"></result>
+        <result column="Moviedesc" property="Moviedesc"></result>
+        <result column="Typeid" property="Typeid"></result>
+        <result column="Dmdate" property="Dmdate"></result>
+        <association property="type" javaType="com.aaa.movie.entity.Type">
+            <result column="Typename" property="Typename"></result>
+        </association>
+    </resultMap>
+
+    <select id="findMovie" resultMap="movieList">
+        SELECT tm.movieid,tm.Moviename,tm.Movielang,tm.Moviescore,tm.Moviedesc,tm.Typeid,tt.Typename,tm.Dmdate
+        FROM tb_movie tm INNER JOIN tb_type tt ON tm.Typeid=tt.id
+    </select>
+    <select id="findMovieid" resultMap="movieList">
+         SELECT tm.movieid,tm.Moviename,tm.Movielang,tm.Moviescore,tm.Moviedesc,tm.Typeid,tt.Typename,tm.Dmdate
+        FROM tb_movie tm INNER JOIN tb_type tt ON tm.Typeid=tt.id where tm.movieid=#{movieid}
+    </select>
+
+    <update id="UpdateMovie" parameterType="com.aaa.movie.entity.Movie">
+      UPDATE tb_movie SET Moviename=#{Moviename},Movielang=#{Movielang},Moviescore=#{Moviescore},Moviedesc=#{Moviedesc},Typeid=#{Typeid},Dmdate=#{Dmdate} WHERE movieid=#{movieid}
+    </update>
+</mapper>
